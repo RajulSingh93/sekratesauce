@@ -17,7 +17,10 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
         href="#home"
         onClick={onClose}
         className={s.mark}
-        style={{ fontSize: scrolled ? "18px" : "22px" }}
+        // Scales down on narrow phones so the wordmark and Menu button fit.
+        style={{
+          fontSize: scrolled ? "clamp(15px, 4.5vw, 18px)" : "clamp(16px, 5.3vw, 22px)",
+        }}
       >
         SEKRATE SAUCE
       </a>

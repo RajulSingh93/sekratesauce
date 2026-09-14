@@ -1,20 +1,19 @@
+import type { RefObject } from "react";
 import s from "./site.module.css";
 import { mixtapes } from "@/lib/site-data";
 
 type Props = {
   active: number | null;
-  shift: number;
+  // The heading's scroll drift is written to this directly (see Site).
+  titleRef: RefObject<HTMLHeadingElement | null>;
   onPlay: (i: number) => void;
   onToggle: (i: number) => void;
 };
 
-export default function Mixtapes({ active, shift, onPlay, onToggle }: Props) {
+export default function Mixtapes({ active, titleRef, onPlay, onToggle }: Props) {
   return (
     <section id="mixtapes" data-reveal className={`${s.section} ${s.reveal}`}>
-      <h2
-        className={`${s.display} ${s.mixTitle}`}
-        style={{ transform: `translateX(${shift}px)` }}
-      >
+      <h2 ref={titleRef} className={`${s.display} ${s.mixTitle}`}>
         Mixtapes
       </h2>
 

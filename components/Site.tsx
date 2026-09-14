@@ -34,14 +34,12 @@ import Services from "./Services";
 import Statement from "./Statement";
 
 const CELLS = 24;
-// Every scroll-driven value clamps at this point, so storing the clamped
-// value keeps deep scrolling from re-rendering the tree for no visual change.
+// Every scroll-driven value clamps at this point.
 const SCROLL_CAP = 1400;
 const SIM_LENGTH = 30;
 
 export default function Site({ year }: { year: number }) {
   const [scrolled, setScrolled] = useState(false);
-  const [y, setY] = useState(0);
   const [wide, setWide] = useState(true);
   const [menu, setMenu] = useState(false);
   const [mix, setMix] = useState<number | null>(null);
@@ -61,6 +59,9 @@ export default function Site({ year }: { year: number }) {
   const pctRef = useRef<HTMLSpanElement>(null);
   const ribbonRef = useRef<HTMLDivElement>(null);
   const collageRef = useRef<HTMLDivElement>(null);
+  const heroBgRef = useRef<HTMLDivElement>(null);
+  const heroFgRef = useRef<HTMLDivElement>(null);
+  const mixTitleRef = useRef<HTMLHeadingElement>(null);
 
   // Visitor energy, ribbon motion and playback all run off refs so their
   // animation frames never read stale state.
@@ -102,6 +103,29 @@ export default function Site({ year }: { year: number }) {
       });
     };
 
+    // Parallax is written straight to the DOM rather than through state, so
+    // scrolling never re-renders the page; that keeps phones smooth.
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    let lastY = -1;
+    const applyParallax = (scrollY: number) => {
+      const y = reducedMotion ? 0 : Math.min(scrollY, SCROLL_CAP);
+      if (y === lastY) return;
+      lastY = y;
+      const bg = heroBgRef.current;
+      const fg = heroFgRef.current;
+      const title = mixTitleRef.current;
+      if (bg) bg.style.transform = `translateY(${y * 0.22}px) scale(1.04)`;
+      if (fg) {
+        fg.style.transform = `translateY(${y * -0.1}px)`;
+        fg.style.opacity = String(Math.max(0, 1 - y / 800));
+      }
+      if (title) {
+        title.style.transform = `translateX(${-Math.max(0, y - 1200) * 0.08}px)`;
+      }
+    };
+
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
@@ -109,7 +133,7 @@ export default function Site({ year }: { year: number }) {
         const next = window.scrollY;
         revealPassed();
         setScrolled(next > 40);
-        setY(Math.min(next, SCROLL_CAP));
+        applyParallax(next);
       });
     };
 
@@ -226,12 +250,20 @@ export default function Site({ year }: { year: number }) {
   }, [cellRefs]);
 
   // Genre marquee — eases toward the energy-scaled target speed and wraps
-  // at half its width, where the doubled list repeats.
+  // at half its width, where the doubled list repeats. It stays still for
+  // reduced-motion users and skips work while scrolled out of view.
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let id = 0;
+    let visible = true;
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+    });
+    if (ribbonRef.current) io.observe(ribbonRef.current);
+
     const tick = () => {
       const el = ribbonRef.current;
-      if (el) {
+      if (el && visible) {
         speedRef.current += (targetRef.current - speedRef.current) * 0.06;
         rxRef.current -= speedRef.current;
         const half = el.scrollWidth / 2;
@@ -241,8 +273,22 @@ export default function Site({ year }: { year: number }) {
       id = requestAnimationFrame(tick);
     };
     id = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(id);
+    return () => {
+      cancelAnimationFrame(id);
+      io.disconnect();
+    };
   }, []);
+
+  // Stop the page behind the open menu from scrolling on touch screens.
+  useEffect(() => {
+    if (!menu) return;
+    const root = document.documentElement;
+    const previous = root.style.overflow;
+    root.style.overflow = "hidden";
+    return () => {
+      root.style.overflow = previous;
+    };
+  }, [menu]);
 
   // Preload track durations so the cards can show a runtime before playback.
   useEffect(() => {
@@ -461,7 +507,7 @@ export default function Site({ year }: { year: number }) {
       />
       <MenuOverlay open={menu} onClose={() => setMenu(false)} />
 
-      <Hero y={y} />
+      <Hero bgRef={heroBgRef} fgRef={heroFgRef} />
 
       <div className={`${s.scrollHint} ${s.dim}`}>
         <span className={`${s.chip} ${s.chipStart}`}>Scroll to explore</span>
@@ -488,14 +534,14 @@ export default function Site({ year }: { year: number }) {
 
       <Mixtapes
         active={mix}
-        shift={-Math.max(0, y - 1200) * 0.08}
+        titleRef={mixTitleRef}
         onPlay={(i) => setMix(i)}
         onToggle={(i) => setMix((m) => (m === i ? null : i))}
       />
 
       <Photos wide={wide} collageRef={collageRef} />
 
-      <RadioMix shift={-Math.max(0, y - 3200) * 0.08} />
+      <RadioMix />
 
       <Services />
 

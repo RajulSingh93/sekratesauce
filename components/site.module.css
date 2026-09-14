@@ -157,6 +157,7 @@
   line-height: 1;
   white-space: nowrap;
   transition: font-size 0.4s ease;
+  padding-block: 11px;
 }
 
 .menuBtn {
@@ -203,6 +204,7 @@
   flex-direction: column;
   padding: clamp(96px, 12vh, 140px) clamp(20px, 4vw, 56px) clamp(32px, 6vh, 64px);
   transition: clip-path 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+  overscroll-behavior: contain;
 }
 
 .menuInner {
@@ -241,9 +243,11 @@
     padding-left 0.3s;
 }
 
-.menuLink:hover {
-  padding-left: 14px;
-  opacity: 1;
+@media (hover: hover) {
+  .menuLink:hover {
+    padding-left: 14px;
+    opacity: 1;
+  }
 }
 
 .menuNo {
@@ -297,8 +301,10 @@
   white-space: nowrap;
 }
 
-.solidBtn:hover {
-  opacity: 0.8;
+@media (hover: hover) {
+  .solidBtn:hover {
+    opacity: 0.8;
+  }
 }
 
 .asideEmail {
@@ -347,6 +353,7 @@
   inset: -12% 0 0 0;
   z-index: 0;
   will-change: transform;
+  transform: scale(1.04);
 }
 
 .heroScrim {
@@ -559,8 +566,10 @@
   background: #0a0a0a;
 }
 
-.portrait:hover .zoom {
-  transform: scale(1.04);
+@media (hover: hover) {
+  .portrait:hover .zoom {
+    transform: scale(1.04);
+  }
 }
 
 .quote {
@@ -583,7 +592,7 @@
 /* ===== Music ===== */
 .musicTitle {
   margin: 0 0 clamp(24px, 4vw, 56px) clamp(20px, 4vw, 56px);
-  font-size: clamp(4rem, 15vw, 17rem);
+  font-size: clamp(2.8rem, 15vw, 17rem);
   white-space: nowrap;
 }
 
@@ -675,9 +684,11 @@
   transition: background 0.25s, color 0.25s;
 }
 
-.playBtn:hover {
-  background: #fff;
-  color: #000;
+@media (hover: hover) {
+  .playBtn:hover {
+    background: #fff;
+    color: #000;
+  }
 }
 
 .seekWrap {
@@ -690,7 +701,7 @@
 
 .seek {
   position: relative;
-  height: 20px;
+  height: 32px;
   display: flex;
   align-items: center;
   touch-action: none;
@@ -736,7 +747,7 @@
 .mixTitle {
   margin: 0 0 clamp(24px, 4vw, 56px) 0;
   padding-left: clamp(20px, 4vw, 56px);
-  font-size: clamp(3.4rem, 12.5vw, 17rem);
+  font-size: clamp(2.4rem, 12.5vw, 17rem);
   white-space: nowrap;
   will-change: transform;
 }
@@ -819,9 +830,11 @@
   transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s;
 }
 
-.mixThumbBtn:hover .mixThumb {
-  transform: scale(1.05);
-  filter: grayscale(0);
+@media (hover: hover) {
+  .mixThumbBtn:hover .mixThumb {
+    transform: scale(1.05);
+    filter: grayscale(0);
+  }
 }
 
 .mixPlay {
@@ -838,9 +851,11 @@
   transition: background 0.25s, color 0.25s;
 }
 
-.mixThumbBtn:hover .mixPlay {
-  background: #fff;
-  color: #000;
+@media (hover: hover) {
+  .mixThumbBtn:hover .mixPlay {
+    background: #fff;
+    color: #000;
+  }
 }
 
 .mixInfo {
@@ -910,21 +925,26 @@
   transition: background 0.25s, color 0.25s;
 }
 
-.outlineBtn:hover {
-  background: #fff;
-  color: #000;
+@media (hover: hover) {
+  .outlineBtn:hover {
+    background: #fff;
+    color: #000;
+  }
 }
 
 .mixLink {
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 /* ===== Photos ===== */
 .photosTitle {
   margin: 0 0 0 -0.04em;
-  font-size: clamp(4rem, 15vw, 17rem);
+  font-size: clamp(2.8rem, 15vw, 17rem);
 }
 
 .headChip {
@@ -947,8 +967,10 @@
   background: #0a0a0a;
 }
 
-.photo:hover .zoom {
-  transform: scale(1.04);
+@media (hover: hover) {
+  .photo:hover .zoom {
+    transform: scale(1.04);
+  }
 }
 
 .caption {
@@ -1004,7 +1026,7 @@
 /* ===== Radio ===== */
 .radioTitle {
   margin: 0 0 0 -0.04em;
-  font-size: clamp(3.4rem, 12.5vw, 17rem);
+  font-size: clamp(2.4rem, 12.5vw, 17rem);
   white-space: nowrap;
   will-change: transform;
 }
@@ -1091,10 +1113,12 @@
   transition: background 0.3s, color 0.3s;
 }
 
-.ghostBtn:hover {
-  background: #fff;
-  color: #000;
-  opacity: 1;
+@media (hover: hover) {
+  .ghostBtn:hover {
+    background: #fff;
+    color: #000;
+    opacity: 1;
+  }
 }
 
 /* ===== DJ Services ===== */
@@ -1138,8 +1162,10 @@
   white-space: nowrap;
 }
 
-.darkBtn:hover {
-  opacity: 0.8;
+@media (hover: hover) {
+  .darkBtn:hover {
+    opacity: 0.8;
+  }
 }
 
 .servicesGrid {
@@ -1162,10 +1188,12 @@
   transition: background 0.3s, color 0.3s;
 }
 
-.serviceCard:hover {
-  background: #000;
-  color: #fff;
-  opacity: 1;
+@media (hover: hover) {
+  .serviceCard:hover {
+    background: #000;
+    color: #fff;
+    opacity: 1;
+  }
 }
 
 .serviceNo {
@@ -1328,8 +1356,10 @@
   transition: opacity 0.3s;
 }
 
-.submit:hover {
-  opacity: 0.8;
+@media (hover: hover) {
+  .submit:hover {
+    opacity: 0.8;
+  }
 }
 
 .submit:disabled {
@@ -1399,7 +1429,7 @@
 }
 
 .footerMark {
-  font-size: clamp(2rem, 9cqw, 17rem);
+  font-size: clamp(1.5rem, 9cqw, 17rem);
   margin: 0 0 0 -0.04em;
   white-space: nowrap;
 }
@@ -1419,4 +1449,84 @@
 .footerLinks {
   display: flex;
   gap: 24px;
+}
+
+/* ===== Responsive ===== */
+
+/* Narrow phones: tighten the header button and the energy meter so both fit. */
+@media (max-width: 400px) {
+  .menuBtn {
+    gap: 10px;
+  }
+
+  .menuBtnLabel {
+    font-size: 13px;
+  }
+
+  .meterLabel {
+    letter-spacing: 0.14em;
+  }
+
+  .meterCells {
+    gap: 2px;
+  }
+
+  .meterCell {
+    width: 2px;
+  }
+}
+
+/* Single-column menu: span only the real column. "span 2" adds an empty
+   implicit column plus its gap, pushing the links past the screen edge. */
+@media (max-width: 700px) {
+  .menuNav {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Phones: drop the menu descriptors, which would squeeze the link labels. */
+@media (max-width: 480px) {
+  .menuLink {
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+
+  .menuSub {
+    display: none;
+  }
+}
+
+/* Touch screens: roomier tap targets on the small text links. */
+@media (pointer: coarse) {
+  .stackNav,
+  .footerNav {
+    gap: 0;
+  }
+
+  .stackNav a,
+  .footerNav a {
+    padding-block: 8px;
+  }
+
+  .asideEmail {
+    padding-block: 12px;
+  }
+
+  .footerEmail {
+    padding-top: 12px;
+  }
+
+  .footerLinks a {
+    padding-block: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+  }
+
+  .scrollBar,
+  .blinkDot {
+    animation: none;
+  }
 }

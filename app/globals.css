@@ -28,8 +28,24 @@ a {
   transition: opacity 0.25s;
 }
 
-a:hover {
-  opacity: 0.55;
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover dimming only where hovering exists, so taps don't leave links dim. */
+@media (hover: hover) {
+  a:hover {
+    opacity: 0.55;
+  }
+}
+
+/* Touch screens get brief press feedback instead. */
+@media (hover: none) {
+  a:active,
+  button:active {
+    opacity: 0.6;
+  }
 }
 
 input,

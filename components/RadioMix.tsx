@@ -1,16 +1,11 @@
 import s from "./site.module.css";
 import { social } from "@/lib/site-data";
 
-export default function RadioMix({ shift }: { shift: number }) {
+export default function RadioMix() {
   return (
     <section id="radio" data-reveal className={`${s.section} ${s.reveal}`}>
       <div className={s.sectionHead}>
-        <h2
-          className={`${s.display} ${s.radioTitle}`}
-          style={{ transform: `translateX(${shift}px)` }}
-        >
-          Radio Mix
-        </h2>
+        <h2 className={`${s.display} ${s.radioTitle}`}>Radio Mix</h2>
         <span className={s.radioChip}>
           <span className={s.blinkDot} />
           Broadcast coming soon

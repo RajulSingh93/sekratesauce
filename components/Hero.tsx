@@ -1,13 +1,17 @@
 import Image from "next/image";
+import type { RefObject } from "react";
 import s from "./site.module.css";
 
-export default function Hero({ y }: { y: number }) {
+type Props = {
+  // Parallax is written to these directly while scrolling (see Site).
+  bgRef: RefObject<HTMLDivElement | null>;
+  fgRef: RefObject<HTMLDivElement | null>;
+};
+
+export default function Hero({ bgRef, fgRef }: Props) {
   return (
     <section id="home" className={s.hero}>
-      <div
-        className={s.heroBg}
-        style={{ transform: `translateY(${y * 0.22}px) scale(1.04)` }}
-      >
+      <div ref={bgRef} className={s.heroBg}>
         <Image
           src="/assets/hero-musica.jpg"
           alt=""
@@ -19,13 +23,7 @@ export default function Hero({ y }: { y: number }) {
       </div>
       <div aria-hidden="true" className={s.heroScrim} />
 
-      <div
-        className={s.heroFg}
-        style={{
-          transform: `translateY(${y * -0.1}px)`,
-          opacity: Math.max(0, 1 - y / 800),
-        }}
-      >
+      <div ref={fgRef} className={s.heroFg}>
         <p className={`${s.chip} ${s.chipLg}`} style={{ margin: 0, alignSelf: "center" }}>
           DJ / Producer / Open Format
         </p>
