@@ -111,14 +111,6 @@ export default function Music({
               </div>
 
               <div className={s.trackFoot}>
-                <a
-                  href={t.href}
-                  target="_blank"
-                  rel="noopener"
-                  className={s.trackLink}
-                >
-                  Open on {t.platform} ↗
-                </a>
                 <span className={s.trackArtLabel}>
                   Artwork {String(i + 1).padStart(2, "0")}
                 </span>

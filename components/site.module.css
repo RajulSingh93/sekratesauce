@@ -734,17 +734,10 @@
 
 .trackFoot {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
   align-items: center;
   padding-top: 12px;
-}
-
-.trackLink {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .trackArtLabel {
