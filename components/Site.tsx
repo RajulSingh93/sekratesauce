@@ -265,6 +265,9 @@ export default function Site({ year }: { year: number }) {
     if (playRafRef.current) cancelAnimationFrame(playRafRef.current);
     playRafRef.current = null;
     audioRef.current?.pause();
+    audioRef.current = null;
+    analyserRef.current?.disconnect();
+    analyserRef.current = null;
     const rings = window.__waveRings ?? {};
     Object.keys(rings).forEach((k) => rings[k].setLevel(0));
     trackRef.current = null;
@@ -284,34 +287,9 @@ export default function Site({ year }: { year: number }) {
       }
       stopTrack();
 
-      const audio = audioRef.current ?? new Audio();
-      audioRef.current = audio;
-      audio.src = music[i].audio;
-
-      try {
-        const Ctx =
-          window.AudioContext ??
-          (window as unknown as { webkitAudioContext: typeof AudioContext })
-            .webkitAudioContext;
-        ctxRef.current ??= new Ctx();
-        if (!analyserRef.current) {
-          const analyser = ctxRef.current.createAnalyser();
-          analyser.fftSize = 256;
-          ctxRef.current.createMediaElementSource(audio).connect(analyser);
-          analyser.connect(ctxRef.current.destination);
-          analyserRef.current = analyser;
-        }
-        void ctxRef.current.resume();
-      } catch {
-        // Web Audio unavailable — playback still works, the ring just idles.
-      }
-
-      trackRef.current = i;
-      simRef.current = false;
-      simStartRef.current = performance.now();
-      setTrack(i);
-      setSimulated(false);
-
+      // A fresh element per play: a media element can only be wired into
+      // Web Audio once, and the old one is released in stopTrack.
+      const audio = new Audio(music[i].audio);
       // With no audio file present the design falls back to its beat-pulse
       // preview, so the artwork still responds.
       audio.onerror = () => {
@@ -320,11 +298,35 @@ export default function Site({ year }: { year: number }) {
         setSimulated(true);
       };
       audio.onended = () => stopTrack();
+      audioRef.current = audio;
+
+      let analyser: AnalyserNode | null = null;
+      try {
+        const Ctx =
+          window.AudioContext ??
+          (window as unknown as { webkitAudioContext: typeof AudioContext })
+            .webkitAudioContext;
+        const ctx = ctxRef.current ?? new Ctx();
+        ctxRef.current = ctx;
+        analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        ctx.createMediaElementSource(audio).connect(analyser);
+        analyser.connect(ctx.destination);
+        void ctx.resume();
+      } catch {
+        // Web Audio unavailable — playback still works, the ring just idles.
+        analyser = null;
+      }
+      analyserRef.current = analyser;
+
+      trackRef.current = i;
+      simRef.current = false;
+      simStartRef.current = performance.now();
+      setTrack(i);
+      setSimulated(false);
       void audio.play().catch(() => {});
 
-      const bins = analyserRef.current
-        ? new Uint8Array(analyserRef.current.frequencyBinCount)
-        : null;
+      const bins = analyser ? new Uint8Array(analyser.frequencyBinCount) : null;
 
       const tick = () => {
         const index = trackRef.current;
@@ -345,19 +347,15 @@ export default function Site({ year }: { year: number }) {
           nextCurrent = elapsed % SIM_LENGTH;
           nextDuration = SIM_LENGTH;
         } else {
-          const analyser = analyserRef.current;
           if (analyser && bins) {
             analyser.getByteFrequencyData(bins);
             let sum = 0;
             for (let k = 0; k < 12; k++) sum += bins[k];
             level = Math.pow(sum / (12 * 255), 1.4);
           }
-          const a = audioRef.current;
-          if (a) {
-            nextCurrent = a.currentTime;
-            nextDuration = isFinite(a.duration) ? a.duration : 0;
-            nextProgress = nextDuration ? a.currentTime / nextDuration : 0;
-          }
+          nextCurrent = audio.currentTime;
+          nextDuration = isFinite(audio.duration) ? audio.duration : 0;
+          nextProgress = nextDuration ? audio.currentTime / nextDuration : 0;
         }
 
         const rings = window.__waveRings ?? {};

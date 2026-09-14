@@ -12,7 +12,7 @@ export default function Hero({ y }: { y: number }) {
           src="/assets/hero-musica.jpg"
           alt=""
           fill
-          priority
+          preload
           sizes="100vw"
           style={{ objectFit: "cover" }}
         />

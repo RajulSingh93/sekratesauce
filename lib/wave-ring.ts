@@ -13,9 +13,11 @@ const Base = (
 class WaveRing extends Base {
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
-  private seed = 1;
-  private speed = 1;
-  private density = 1;
+  // ECMAScript-private so React 19 passes seed/speed/density as attributes
+  // instead of overwriting these with property assignments.
+  #seed = 1;
+  #speed = 1;
+  #density = 1;
   private rx = 0.95;
   private ry = 0;
   private trx = 0.95;
@@ -44,18 +46,18 @@ class WaveRing extends Base {
     this.canvas.style.cssText = "width:100%;height:100%;display:block;background:#000";
     this.appendChild(this.canvas);
     this.ctx = this.canvas.getContext("2d", { alpha: false }) as CanvasRenderingContext2D;
-    this.seed = parseFloat(this.getAttribute("seed") || "1");
-    this.speed = parseFloat(this.getAttribute("speed") || "1");
-    this.density = parseFloat(this.getAttribute("density") || "1");
+    this.#seed = parseFloat(this.getAttribute("seed") || "1");
+    this.#speed = parseFloat(this.getAttribute("speed") || "1");
+    this.#density = parseFloat(this.getAttribute("density") || "1");
     this.rx = 0.95;
     this.ry = 0;
     this.trx = 0.95;
     this.tryy = 0;
-    this.t = this.seed * 100;
+    this.t = this.#seed * 100;
     this.hover = false;
     this.frame = 0;
     const rnd = (n: number) => {
-      const x = Math.sin(n * 12.9898 + this.seed * 78.233) * 43758.5453;
+      const x = Math.sin(n * 12.9898 + this.#seed * 78.233) * 43758.5453;
       return x - Math.floor(x);
     };
     this.k = [3 + Math.floor(rnd(1) * 3), 5 + Math.floor(rnd(2) * 4), 2 + Math.floor(rnd(3) * 2)];
@@ -63,7 +65,7 @@ class WaveRing extends Base {
     this.paths = Array.from({ length: LEVELS }, () => new Path2D());
     this.level = 0;
     this.smooth = 0;
-    (window.__waveRings = window.__waveRings || {})[String(this.seed)] = this;
+    (window.__waveRings = window.__waveRings || {})[String(this.#seed)] = this;
     this.onMove = (e: PointerEvent) => {
       const r = this.getBoundingClientRect();
       const nx = (e.clientX - r.left) / r.width - 0.5;
@@ -93,8 +95,8 @@ class WaveRing extends Base {
   }
 
   disconnectedCallback() {
-    if (window.__waveRings && window.__waveRings[String(this.seed)] === this) {
-      delete window.__waveRings[String(this.seed)];
+    if (window.__waveRings && window.__waveRings[String(this.#seed)] === this) {
+      delete window.__waveRings[String(this.#seed)];
     }
     if (this.raf) cancelAnimationFrame(this.raf);
     this.raf = null;
@@ -128,8 +130,8 @@ class WaveRing extends Base {
     const dpr = this.dpr;
     this.smooth += (this.level - this.smooth) * (this.level > this.smooth ? 0.5 : 0.12);
     const L = this.smooth;
-    this.t += 0.011 * this.speed * (this.hover ? 0.55 : 1) * (1 + L * 2.5);
-    if (!this.hover) this.tryy += 0.005 * this.speed;
+    this.t += 0.011 * this.#speed * (this.hover ? 0.55 : 1) * (1 + L * 2.5);
+    if (!this.hover) this.tryy += 0.005 * this.#speed;
     this.ry += (this.tryy - this.ry) * 0.08;
     this.rx += (this.trx - this.rx) * 0.08;
     ctx.globalAlpha = 1;
@@ -140,8 +142,8 @@ class WaveRing extends Base {
     const S = Math.min(W, H) * 0.42 * (1 + L * 0.16);
     const f = 2.6;
     const amp = 1 + L * 1.6;
-    const rings = Math.round(38 * this.density);
-    const pts = Math.round(170 * this.density);
+    const rings = Math.round(38 * this.#density);
+    const pts = Math.round(170 * this.#density);
     const cX = Math.cos(this.rx);
     const sX = Math.sin(this.rx);
     const cY = Math.cos(this.ry);

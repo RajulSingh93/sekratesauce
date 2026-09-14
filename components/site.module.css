@@ -201,7 +201,6 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   padding: clamp(96px, 12vh, 140px) clamp(20px, 4vw, 56px) clamp(32px, 6vh, 64px);
   transition: clip-path 0.7s cubic-bezier(0.77, 0, 0.18, 1);
 }
@@ -209,7 +208,9 @@
 .menuInner {
   max-width: 1400px;
   width: 100%;
-  margin: 0 auto;
+  /* Auto margins centre the menu when it fits; unlike justify-content:center
+     they collapse to zero on short screens, so the top stays scrollable. */
+  margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: clamp(32px, 5vw, 96px);

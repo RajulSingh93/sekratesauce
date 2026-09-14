@@ -9,8 +9,10 @@ const Base = (
 class WaveLines extends Base {
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
-  private seed = 1;
-  private speed = 1;
+  // ECMAScript-private so React 19 passes seed/speed as attributes instead of
+  // overwriting these with property assignments.
+  #seed = 1;
+  #speed = 1;
   private nR = 3;
   private t = 0;
   private energy = 0;
@@ -33,15 +35,15 @@ class WaveLines extends Base {
     this.appendChild(this.canvas);
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
     const sa = this.getAttribute("seed") || "1";
-    this.seed = parseFloat(sa);
-    if (isNaN(this.seed)) {
+    this.#seed = parseFloat(sa);
+    if (isNaN(this.#seed)) {
       let hsh = 0;
       for (const ch of sa) hsh = (hsh * 31 + ch.charCodeAt(0)) % 997;
-      this.seed = 1 + hsh / 100;
+      this.#seed = 1 + hsh / 100;
     }
-    this.speed = parseFloat(this.getAttribute("speed") || "1");
+    this.#speed = parseFloat(this.getAttribute("speed") || "1");
     this.nR = parseInt(this.getAttribute("ribbons") || "3", 10);
-    this.t = this.seed * 10;
+    this.t = this.#seed * 10;
     this.energy = 0;
     (window.__waveLines = window.__waveLines || new Set()).add(this);
     this.ro = new ResizeObserver(() => {
@@ -68,6 +70,12 @@ class WaveLines extends Base {
 
   get active() {
     return this.getAttribute("active") !== "false";
+  }
+
+  // React 19 sets a custom element's prop as a property whenever that name
+  // exists on the element, so the property must reflect to the attribute.
+  set active(value: boolean | string) {
+    this.setAttribute("active", String(value));
   }
 
   private sync() {
@@ -100,7 +108,7 @@ class WaveLines extends Base {
   private loop() {
     this.raf = requestAnimationFrame(() => {
       this.raf = null;
-      this.t += 0.012 * this.speed * (1 + (this.energy || 0) * 2.2);
+      this.t += 0.012 * this.#speed * (1 + (this.energy || 0) * 2.2);
       this.draw();
       if (this.active && this.visible !== false) this.loop();
     });
@@ -119,7 +127,7 @@ class WaveLines extends Base {
     const lines = 12;
     const thick = H * 0.34;
     for (let r = 0; r < this.nR; r++) {
-      const ph = this.seed * 3 + r * 2.1;
+      const ph = this.#seed * 3 + r * 2.1;
       const yBase = H * ((r + 0.5) / this.nR);
       const k = 1.6 + r * 0.5;
       const k2 = 3.1 + r * 0.7;
