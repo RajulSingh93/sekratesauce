@@ -303,6 +303,12 @@ export default function Site({ year }: { year: number }) {
 
       let analyser: AnalyserNode | null = null;
       try {
+        // iOS Safari mutes Web Audio while the ringer switch is on silent;
+        // declaring a playback session keeps the music audible (Safari 16.4+).
+        const session = (
+          navigator as Navigator & { audioSession?: { type: string } }
+        ).audioSession;
+        if (session) session.type = "playback";
         const Ctx =
           window.AudioContext ??
           (window as unknown as { webkitAudioContext: typeof AudioContext })
