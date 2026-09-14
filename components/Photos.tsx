@@ -8,10 +8,12 @@ type Props = {
   collageRef: RefObject<HTMLDivElement | null>;
 };
 
-// Grid areas for the 12-column collage, wide vs stacked.
+// Grid areas for the 12-column collage, wide vs stacked. The last row is
+// sized by its two 3:4 portraits, so they show full length instead of being
+// cropped into short fixed-height rows.
 const AREAS = {
   wide: {
-    rowH: "clamp(40px,5.2vw,80px)",
+    rows: "repeat(6, clamp(40px,5.2vw,80px)) auto",
     gap: "clamp(10px,1.2vw,18px)",
     minH: "0",
     cells: [
@@ -19,24 +21,25 @@ const AREAS = {
       "1/6/4/10",
       "1/10/4/13",
       "4/6/7/9",
-      "7/1/10/4",
-      "7/4/10/9",
-      "7/9/10/13",
+      "7/1/8/4",
+      "7/4/8/7",
+      "7/7/8/13",
     ],
     quote: "4/9/7/13",
   },
   narrow: {
-    rowH: "auto",
+    rows: "none",
     gap: "10px",
     minH: "52vw",
+    // Half-width tiles come in pairs so the stacked layout has no gaps.
     cells: [
       "auto/1/auto/13",
       "auto/1/auto/7",
       "auto/7/auto/13",
+      "auto/1/auto/13",
       "auto/1/auto/7",
       "auto/7/auto/13",
-      "auto/1/auto/7",
-      "auto/7/auto/13",
+      "auto/1/auto/13",
     ],
     quote: "auto/1/auto/13",
   },
@@ -52,14 +55,22 @@ export default function Photos({ wide, collageRef }: Props) {
     <figure
       key={photo.slot}
       className={s.photo}
-      style={{ gridArea: col.cells[index], minHeight: col.minH }}
+      style={{
+        gridArea: col.cells[index],
+        aspectRatio: photo.portrait ? "3 / 4" : undefined,
+        minHeight: photo.portrait ? 0 : col.minH,
+      }}
     >
       <div className={s.zoom}>
         <Image
           src={photo.src}
           alt={`${photo.event} — ${photo.meta}`}
           fill
-          sizes="(max-width: 900px) 100vw, 45vw"
+          sizes={
+            photo.portrait
+              ? "(max-width: 900px) 50vw, 25vw"
+              : "(max-width: 900px) 100vw, 45vw"
+          }
           style={{ objectFit: "cover" }}
         />
       </div>
@@ -82,7 +93,7 @@ export default function Photos({ wide, collageRef }: Props) {
       <div
         ref={collageRef}
         className={s.collage}
-        style={{ gridAutoRows: col.rowH, gap: col.gap }}
+        style={{ gridTemplateRows: col.rows, gap: col.gap }}
       >
         {before.map((photo, i) => figure(photo, i))}
 
