@@ -7,7 +7,6 @@ const facts: [string, string][] = [
     "Genres",
     "Tech House · Dubstep · Trap House · Amapiano · Jersey House · UK Garage",
   ],
-  ["Years active", "Seven-plus"],
 ];
 
 export default function About() {
@@ -24,7 +23,7 @@ export default function About() {
             Sauce
           </h2>
           <p className={s.aboutLede}>
-            On the decks for around seven years, from Bhopal to New York.
+            On the decks from Bhopal to New York.
           </p>
           <p className={s.aboutSub}>
             I spent years collecting sounds, discovering combinations, and
@@ -37,19 +36,19 @@ export default function About() {
 
           <div className={s.aboutBody}>
             <p>
-              Resident DJ for New York Fashion Week, Spring and Fall seasons
-              (2021–2023) — performing across shows, collaborating with
-              designers, and playing venues including Sony Hall and Times Square.
+              Former Resident DJ for New York Fashion Week, Spring and Fall
+              seasons, performing across shows, collaborating with designers,
+              and playing venues including Sony Hall and Times Square.
             </p>
             <p>
               Promoter and DJ with Dream Hospitality, a nightlife management
               group, and a regular at several high-profile NYC nightlife
               destinations, including The DL NYC and Harbour NYC. Has worked
-              alongside and shared line-ups with Black Coffee, Major League DJz
-              and other DJs.
+              alongside and shared lineups with Black Coffee, Major League DJz,
+              and other DJs and Hip Hop artists.
             </p>
             <p>
-              The sound blends Trap House, Dubstep and Tech House — driven by
+              The sound blends Trap House, Dubstep and Tech House, driven by
               bass, energy, sharp song selection and an ability to read the room
               to create unforgettable sets.
             </p>

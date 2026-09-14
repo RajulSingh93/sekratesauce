@@ -12,7 +12,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   title: "SEKRATE SAUCE — Open Format DJ · Tech House, Dubstep, Trap House",
   description:
-    "SEKRATE SAUCE — open-format DJ and electronic music artist with seven years behind the decks. Music, mixtapes, live, events, DJ services, DJ course and bookings.",
+    "SEKRATE SAUCE — open-format DJ and electronic music artist. Music, mixtapes, live, events, DJ services, DJ course and bookings.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

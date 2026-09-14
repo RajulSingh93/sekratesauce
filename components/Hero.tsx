@@ -43,9 +43,6 @@ export default function Hero({ y }: { y: number }) {
 
       <div className={`${s.heroFoot} ${s.dim}`}>
         <span className={`${s.chip} ${s.chipStart}`}>
-          Seven-plus years behind the decks
-        </span>
-        <span className={`${s.chip} ${s.chipStart}`}>
           Tech House · Dubstep · Trap House · Amapiano · Jersey House · UK Garage
         </span>
       </div>

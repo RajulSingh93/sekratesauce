@@ -38,9 +38,6 @@ export default function Footer({ year }: { year: number }) {
             <a href={`mailto:${email}`} className={s.footerEmail}>
               {email}
             </a>
-            <span className={s.footerNote}>
-              Seven-plus years behind the decks.
-            </span>
           </div>
         </div>
 

@@ -1420,13 +1420,6 @@
   padding-bottom: 6px;
 }
 
-.footerNote {
-  font-size: 13px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.6);
-  max-width: 30ch;
-}
-
 .footerMark {
   font-size: clamp(2rem, 9cqw, 17rem);
   margin: 0 0 0 -0.04em;

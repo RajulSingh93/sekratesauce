@@ -89,7 +89,6 @@ export default function MenuOverlay({ open, onClose }: Props) {
               Tech House · Dubstep · Trap House · Amapiano · Jersey House · UK
               Garage
             </span>
-            <span>Seven-plus years behind the decks</span>
           </div>
         </aside>
       </div>
