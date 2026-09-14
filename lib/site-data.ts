@@ -96,10 +96,10 @@ export const mixtapes: Mixtape[] = [
 ];
 
 export const live: Photo[] = [
-  { event: "New York Fashion Week", meta: "Runway · Sony Hall", slot: "v4-p1", src: "/assets/photo-runway.png", placeholder: "[LIVE PHOTO]" },
-  { event: "New York Fashion Week", meta: "The room", slot: "v4-p2", src: "/assets/photo-crowd.png", placeholder: "[LIVE PHOTO]" },
-  { event: "New York Fashion Week", meta: "Before the show", slot: "v4-p3", src: "/assets/photo-blue-runway.png", placeholder: "[LIVE PHOTO]" },
-  { event: "Backstage", meta: "NYFW", slot: "v4-p4", src: "/assets/photo-backstage.png", placeholder: "[LIVE PHOTO]" },
+  { event: "New York Fashion Week", meta: "Runway · Sony Hall", slot: "v4-p1", src: "/assets/photo-runway.jpg", placeholder: "[LIVE PHOTO]" },
+  { event: "New York Fashion Week", meta: "The room", slot: "v4-p2", src: "/assets/photo-crowd.jpg", placeholder: "[LIVE PHOTO]" },
+  { event: "New York Fashion Week", meta: "Before the show", slot: "v4-p3", src: "/assets/photo-blue-runway.jpg", placeholder: "[LIVE PHOTO]" },
+  { event: "Backstage", meta: "NYFW", slot: "v4-p4", src: "/assets/photo-backstage.jpg", placeholder: "[LIVE PHOTO]" },
   { event: "Studio", meta: "On the decks", slot: "v4-p5", src: "/assets/photo-decks.jpg", placeholder: "[PHOTO]" },
   { event: "Platform 9", meta: "Off duty", slot: "v4-p6", src: "/assets/photo-subway.jpg", placeholder: "[PHOTO]" },
   { event: "Wedding", meta: "From the booth", slot: "v4-p7", src: "/assets/photo-wedding.jpg", placeholder: "[PHOTO]" },
