@@ -1,10 +1,5 @@
-import styles from "./page.module.css";
+import Site from "@/components/Site";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <h1 className={styles.title}>SEKRATE SAUCE</h1>
-      <p className={styles.note}>New site coming soon.</p>
-    </main>
-  );
+  return <Site year={new Date().getFullYear()} />;
 }
