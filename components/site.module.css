@@ -1354,6 +1354,19 @@
   opacity: 0.8;
 }
 
+.submit:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
 .formStatus {
   margin: 0;
   font-size: 12px;

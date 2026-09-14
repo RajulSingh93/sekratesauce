@@ -7,11 +7,13 @@ import {
   useMemo,
   useRef,
   useState,
+  useTransition,
   type FormEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
 import s from "./site.module.css";
+import { sendBooking } from "@/app/actions";
 import { email, music } from "@/lib/site-data";
 import { registerWaveLines } from "@/lib/wave-lines";
 import { registerWaveRing } from "@/lib/wave-ring";
@@ -49,9 +51,8 @@ export default function Site({ year }: { year: number }) {
   const [duration, setDuration] = useState(0);
   const [simulated, setSimulated] = useState(false);
   const [durations, setDurations] = useState<Record<number, number>>({});
-  const [formNote, setFormNote] = useState(
-    "Demo form — not connected to email yet. Use the address on the left until it is.",
-  );
+  const [formNote, setFormNote] = useState("");
+  const [sending, startSending] = useTransition();
 
   const cellRefs = useMemo(
     () => Array.from({ length: CELLS }, () => createRef<HTMLSpanElement>()),
@@ -421,13 +422,25 @@ export default function Site({ year }: { year: number }) {
     [seekTo],
   );
 
+  // Submitting through onSubmit rather than <form action> keeps what the
+  // visitor typed if sending fails — React resets action forms either way.
   const onSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const field = e.currentTarget.elements.namedItem("name");
-    const name = field instanceof HTMLInputElement ? field.value.trim() : "";
-    setFormNote(
-      `Thanks${name ? `, ${name}` : ""} — this demo doesn't send yet. Email ${email} directly for now.`,
-    );
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+
+    startSending(async () => {
+      const result = await sendBooking(data).catch(() => "failed" as const);
+      if (result === "sent") {
+        form.reset();
+        setFormNote(`Thanks${name ? `, ${name}` : ""} — request sent. You'll hear back soon.`);
+      } else if (result === "invalid") {
+        setFormNote("Please add your name and a valid email address.");
+      } else {
+        setFormNote(`That didn't go through. Try again, or email ${email} directly.`);
+      }
+    });
   }, []);
 
   return (
@@ -490,7 +503,7 @@ export default function Site({ year }: { year: number }) {
         }}
       />
 
-      <Booking note={formNote} onSubmit={onSubmit} />
+      <Booking note={formNote} sending={sending} onSubmit={onSubmit} />
       <Footer year={year} />
     </div>
   );

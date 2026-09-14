@@ -4,10 +4,11 @@ import { eventTypes } from "@/lib/site-data";
 
 type Props = {
   note: string;
+  sending: boolean;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 };
 
-export default function Booking({ note, onSubmit }: Props) {
+export default function Booking({ note, sending, onSubmit }: Props) {
   return (
     <section id="booking" data-reveal className={`${s.booking} ${s.reveal}`}>
       <div className={s.bookingInner}>
@@ -24,6 +25,10 @@ export default function Booking({ note, onSubmit }: Props) {
         </div>
 
         <form onSubmit={onSubmit} className={s.form}>
+          {/* Spam trap: invisible to people, so only bots fill it in. */}
+          <div className={s.trap} aria-hidden="true">
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </div>
           <label className={s.field}>
             Name
             <input name="name" required className={s.input} />
@@ -68,8 +73,8 @@ export default function Booking({ note, onSubmit }: Props) {
           </label>
 
           <div className={s.formFoot}>
-            <button type="submit" className={s.submit}>
-              Send booking request
+            <button type="submit" disabled={sending} className={s.submit}>
+              {sending ? "Sending…" : "Send booking request"}
             </button>
             <p className={s.formStatus} aria-live="polite">
               {note}
