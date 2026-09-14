@@ -109,12 +109,6 @@ export default function Music({
                   </span>
                 </div>
               </div>
-
-              <div className={s.trackFoot}>
-                <span className={s.trackArtLabel}>
-                  Artwork {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
             </article>
           );
         })}
