@@ -158,12 +158,12 @@
 .logo {
   display: block;
   width: auto;
-  height: 56px;
+  height: 72px;
   transition: height 0.4s ease;
 }
 
 .markScrolled .logo {
-  height: 44px;
+  height: 56px;
 }
 
 .menuBtn {
@@ -209,7 +209,7 @@
   display: flex;
   flex-direction: column;
   /* The top floor clears the header and its logo on short screens. */
-  padding: clamp(116px, 12vh, 140px) clamp(20px, 4vw, 56px) clamp(32px, 6vh, 64px);
+  padding: clamp(136px, 12vh, 150px) clamp(20px, 4vw, 56px) clamp(32px, 6vh, 64px);
   transition: clip-path 0.7s cubic-bezier(0.77, 0, 0.18, 1);
   overscroll-behavior: contain;
 }
@@ -351,7 +351,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 120px clamp(20px, 4vw, 56px) clamp(32px, 5vh, 56px);
+  padding: 140px clamp(20px, 4vw, 56px) clamp(32px, 5vh, 56px);
   overflow: hidden;
 }
 
@@ -1487,11 +1487,11 @@
    squeeze the link labels. */
 @media (max-width: 480px) {
   .logo {
-    height: 48px;
+    height: 60px;
   }
 
   .markScrolled .logo {
-    height: 44px;
+    height: 48px;
   }
 
   .menuLink {
