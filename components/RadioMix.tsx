@@ -5,7 +5,7 @@ export default function RadioMix() {
   return (
     <section id="radio" data-reveal className={`${s.section} ${s.reveal}`}>
       <div className={s.sectionHead}>
-        <h2 className={`${s.display} ${s.radioTitle}`}>Radio Mix</h2>
+        <h2 data-drift className={`${s.display} ${s.radioTitle}`}>Radio Mix</h2>
         <span className={s.radioChip}>
           <span className={s.blinkDot} />
           Broadcast coming soon

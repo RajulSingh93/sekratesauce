@@ -63,11 +63,11 @@
 
 .reveal {
   opacity: 0;
-  /* Sections swing up from a slight backward tilt as they scroll into view;
-     Site's reveal observer sets transform: none to play it. */
-  transform: perspective(1600px) translate3d(0, 72px, -60px) rotateX(8deg);
+  /* The starting pose of the 3D entrance. Site drives it from the scroll
+     position, swinging each section up out of this tilt as it rises into
+     view, so there is no time-based transition here. */
+  transform: perspective(1600px) translate3d(0, 90px, -80px) rotateX(10deg);
   transform-origin: 50% 0%;
-  transition: opacity 0.9s ease, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .section {
@@ -993,6 +993,12 @@
   }
 }
 
+/* Enlarged slightly so the photo can slide within its frame (by the
+   --parallax offset Site sets while scrolling) without exposing an edge. */
+.parallaxImg {
+  transform: translate3d(0, var(--parallax, 0px), 0) scale(1.12);
+}
+
 .caption {
   position: absolute;
   left: 12px;
@@ -1551,8 +1557,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .reveal {
+    opacity: 1;
     transform: none;
-    transition: none;
+  }
+
+  .parallaxImg {
+    transform: none;
   }
 
   .scrollBar,

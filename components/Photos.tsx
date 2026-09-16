@@ -54,6 +54,9 @@ export default function Photos({ wide, collageRef }: Props) {
   const figure = (photo: (typeof live)[number], index: number) => (
     <figure
       key={photo.slot}
+      // Landscape photos slide inside their frames while scrolling (see
+      // Site); portraits stay put so they remain full length.
+      data-parallax={photo.portrait ? undefined : true}
       className={s.photo}
       style={{
         gridArea: col.cells[index],
@@ -71,6 +74,7 @@ export default function Photos({ wide, collageRef }: Props) {
               ? "(max-width: 900px) 50vw, 25vw"
               : "(max-width: 900px) 100vw, 45vw"
           }
+          className={photo.portrait ? undefined : s.parallaxImg}
           style={{ objectFit: "cover" }}
         />
       </div>
@@ -84,7 +88,7 @@ export default function Photos({ wide, collageRef }: Props) {
   return (
     <section id="photos" data-reveal className={`${s.section} ${s.reveal}`}>
       <div className={s.sectionHead}>
-        <h2 className={`${s.display} ${s.photosTitle}`}>Photos</h2>
+        <h2 data-drift className={`${s.display} ${s.photosTitle}`}>Photos</h2>
         <span className={`${s.chip} ${s.headChip}`}>
           Live · Backstage · Studio · Off duty
         </span>

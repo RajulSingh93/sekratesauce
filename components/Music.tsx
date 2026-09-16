@@ -30,7 +30,7 @@ export default function Music({
 }: Props) {
   return (
     <section id="music" data-reveal className={`${s.section} ${s.reveal}`}>
-      <h2 className={`${s.display} ${s.musicTitle}`}>Music</h2>
+      <h2 data-drift className={`${s.display} ${s.musicTitle}`}>Music</h2>
       <div className={s.musicGrid}>
         {music.map((t, i) => {
           const on = active === i;

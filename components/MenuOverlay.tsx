@@ -9,6 +9,9 @@ type Props = {
 export default function MenuOverlay({ open, onClose }: Props) {
   return (
     <div
+      // Wheel scrolling inside the menu stays native instead of smooth-scrolling
+      // the page behind it.
+      data-lenis-prevent
       className={s.menu}
       style={{
         clipPath: open ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",

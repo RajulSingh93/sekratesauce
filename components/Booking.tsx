@@ -13,7 +13,7 @@ export default function Booking({ note, sending, onSubmit }: Props) {
     <section id="booking" data-reveal className={`${s.booking} ${s.reveal}`}>
       <div className={s.bookingInner}>
         <div className={s.bookingHead}>
-          <h2 className={`${s.display} ${s.bookingTitle}`}>
+          <h2 data-drift className={`${s.display} ${s.bookingTitle}`}>
             Book
             <br />
             Sekrate Sauce

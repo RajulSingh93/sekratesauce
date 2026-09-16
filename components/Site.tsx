@@ -11,6 +11,7 @@ import {
   type FormEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import Lenis from "lenis";
 
 import s from "./site.module.css";
 import { sendBooking } from "@/app/actions";
@@ -61,7 +62,6 @@ export default function Site({ year }: { year: number }) {
   const collageRef = useRef<HTMLDivElement>(null);
   const heroBgRef = useRef<HTMLDivElement>(null);
   const heroFgRef = useRef<HTMLDivElement>(null);
-  const mixTitleRef = useRef<HTMLHeadingElement>(null);
 
   // Visitor energy, ribbon motion and playback all run off refs so their
   // animation frames never read stale state.
@@ -89,40 +89,112 @@ export default function Site({ year }: { year: number }) {
     registerWaveLines();
   }, []);
 
-  // Scroll, resize, escape key and section reveals.
+  // Scroll-driven motion, written straight to the DOM so scrolling never
+  // re-renders the page: the hero parallax, each section's 3D entrance, and
+  // headings and photos that keep drifting while they are on screen. All of
+  // it follows the scroll position, so it plays in reverse when scrolling up.
   useEffect(() => {
     let raf: number | null = null;
-
-    const revealPassed = () => {
-      document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
-        if (el.style.opacity === "1") return;
-        if (el.getBoundingClientRect().top < window.innerHeight * 0.92) {
-          el.style.opacity = "1";
-          el.style.transform = "none";
-        }
-      });
-    };
-
-    // Parallax is written straight to the DOM rather than through state, so
-    // scrolling never re-renders the page; that keeps phones smooth.
+    let disposed = false;
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    let lastY = -1;
-    const applyParallax = (scrollY: number) => {
-      const y = reducedMotion ? 0 : Math.min(scrollY, SCROLL_CAP);
-      if (y === lastY) return;
-      lastY = y;
+
+    const sections = [
+      ...document.querySelectorAll<HTMLElement>("[data-reveal]"),
+    ];
+    const headings = [...document.querySelectorAll<HTMLElement>("[data-drift]")];
+    const headingSections = headings.map(
+      (h) => h.closest<HTMLElement>("[data-reveal]") ?? h,
+    );
+    const photos = [
+      ...document.querySelectorAll<HTMLElement>("[data-parallax]"),
+    ];
+
+    // Only touch the DOM when a value changes, so still elements cost nothing.
+    const written = new WeakMap<HTMLElement, Map<string, string>>();
+    const write = (el: HTMLElement, prop: string, value: string) => {
+      let cache = written.get(el);
+      if (!cache) written.set(el, (cache = new Map()));
+      if (cache.get(prop) === value) return;
+      cache.set(prop, value);
+      el.style.setProperty(prop, value);
+    };
+
+    // Position from layout rather than getBoundingClientRect, so an element's
+    // own transform never feeds back into its motion.
+    const pageTop = (el: HTMLElement) => {
+      let top = 0;
+      for (let n: HTMLElement | null = el; n; n = n.offsetParent as HTMLElement | null) {
+        top += n.offsetTop;
+      }
+      return top;
+    };
+    const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+    // 0 as an element's top enters at the bottom of the screen, 1 once its
+    // bottom has left at the top.
+    const passage = (el: HTMLElement, scrollY: number, vh: number) =>
+      clamp01((scrollY + vh - pageTop(el)) / (vh + el.offsetHeight));
+
+    // How far each heading may drift sideways without running off-screen.
+    let driftRoom: number[] = [];
+    const measureDrift = () => {
+      const vw = window.innerWidth;
+      driftRoom = headings.map((h, i) => {
+        const section = headingSections[i];
+        const saved = section.style.transform;
+        section.style.transform = "none";
+        h.style.transform = "none";
+        const range = document.createRange();
+        range.selectNodeContents(h);
+        const text = range.getBoundingClientRect();
+        section.style.transform = saved;
+        written.get(h)?.delete("transform");
+        return Math.max(0, Math.min(vw * 0.05, text.left - 8, vw - text.right - 8));
+      });
+    };
+
+    const update = () => {
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+      setScrolled(scrollY > 40);
+      if (reducedMotion) return;
+
+      const y = Math.min(scrollY, SCROLL_CAP);
       const bg = heroBgRef.current;
       const fg = heroFgRef.current;
-      const title = mixTitleRef.current;
-      if (bg) bg.style.transform = `translateY(${y * 0.22}px) scale(1.04)`;
+      if (bg) write(bg, "transform", `translateY(${y * 0.22}px) scale(1.04)`);
       if (fg) {
-        fg.style.transform = `translateY(${y * -0.1}px)`;
-        fg.style.opacity = String(Math.max(0, 1 - y / 800));
+        write(fg, "transform", `translateY(${y * -0.1}px)`);
+        write(fg, "opacity", String(Math.max(0, 1 - y / 800)));
       }
-      if (title) {
-        title.style.transform = `translateX(${-Math.max(0, y - 1200) * 0.08}px)`;
+
+      // Each section swings up out of a backward tilt while its top rises
+      // from the bottom of the screen to 30% from the top, so the motion
+      // plays out in plain view (matches the .reveal starting pose).
+      for (const el of sections) {
+        const p = clamp01((scrollY + vh - pageTop(el)) / (vh * 0.7));
+        const rest = (1 - p) ** 2;
+        write(el, "opacity", Math.min(1, (1 - rest) * 1.4).toFixed(3));
+        write(
+          el,
+          "transform",
+          rest < 0.001
+            ? "none"
+            : `perspective(1600px) translate3d(0, ${(90 * rest).toFixed(1)}px, ${(-80 * rest).toFixed(1)}px) rotateX(${(10 * rest).toFixed(2)}deg)`,
+        );
+      }
+
+      // Big headings drift right to left while their section crosses the screen.
+      headings.forEach((h, i) => {
+        const q = passage(headingSections[i], scrollY, vh);
+        write(h, "transform", `translate3d(${((0.5 - q) * 2 * driftRoom[i]).toFixed(1)}px, 0, 0)`);
+      });
+
+      // Photos slide within their frames.
+      for (const el of photos) {
+        const shift = (0.5 - passage(el, scrollY, vh)) * 2 * 0.06 * el.offsetHeight;
+        write(el, "--parallax", `${shift.toFixed(1)}px`);
       }
     };
 
@@ -130,49 +202,45 @@ export default function Site({ year }: { year: number }) {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = null;
-        const next = window.scrollY;
-        revealPassed();
-        setScrolled(next > 40);
-        applyParallax(next);
+        update();
       });
     };
 
-    const onResize = () => setWide(window.innerWidth >= 900);
+    const onResize = () => {
+      setWide(window.innerWidth >= 900);
+      measureDrift();
+      update();
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenu(false);
     };
-    const onHash = () => window.setTimeout(revealPassed, 50);
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     window.addEventListener("keydown", onKey);
-    window.addEventListener("hashchange", onHash);
-    onScroll();
     onResize();
-
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((entry) => {
-          if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
-            const el = entry.target as HTMLElement;
-            el.style.opacity = "1";
-            el.style.transform = "none";
-            io.unobserve(el);
-          }
-        }),
-      { threshold: 0, rootMargin: "0px 0px -8% 0px" },
-    );
-    document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
-    revealPassed();
+    // Heading widths change once the web font has loaded.
+    void document.fonts?.ready.then(() => {
+      if (disposed) return;
+      measureDrift();
+      update();
+    });
 
     return () => {
+      disposed = true;
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("keydown", onKey);
-      window.removeEventListener("hashchange", onHash);
-      io.disconnect();
     };
+  }, []);
+
+  // Smooth, gliding wheel scrolling. Touch keeps its native momentum, and
+  // reduced-motion users keep the browser's normal scrolling.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const lenis = new Lenis({ autoRaf: true, anchors: true });
+    return () => lenis.destroy();
   }, []);
 
   // "Reading the room" — pointer, scroll and click energy drives the meter,
@@ -534,7 +602,6 @@ export default function Site({ year }: { year: number }) {
 
       <Mixtapes
         active={mix}
-        titleRef={mixTitleRef}
         onPlay={(i) => setMix(i)}
         onToggle={(i) => setMix((m) => (m === i ? null : i))}
       />

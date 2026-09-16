@@ -6,7 +6,7 @@ export default function Services() {
     <section id="services" data-reveal className={`${s.services} ${s.reveal}`}>
       <div className={s.servicesInner}>
         <div className={s.servicesHead}>
-          <h2 className={`${s.display} ${s.servicesTitle}`}>
+          <h2 data-drift className={`${s.display} ${s.servicesTitle}`}>
             DJ
             <br />
             Services
