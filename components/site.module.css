@@ -63,13 +63,16 @@
 
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Sections swing up from a slight backward tilt as they scroll into view;
+     Site's reveal observer sets transform: none to play it. */
+  transform: perspective(1600px) translate3d(0, 72px, -60px) rotateX(8deg);
+  transform-origin: 50% 0%;
+  transition: opacity 0.9s ease, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .section {
   position: relative;
-  padding: clamp(60px, 8vw, 120px) 0 clamp(80px, 10vw, 160px);
+  padding: clamp(40px, 5vw, 80px) 0;
   overflow: hidden;
 }
 
@@ -449,8 +452,7 @@
 
 /* ===== Statement ===== */
 .statement {
-  padding: clamp(80px, 10vw, 160px) clamp(20px, 4vw, 56px)
-    clamp(100px, 14vw, 200px);
+  padding: clamp(56px, 7vw, 112px) clamp(20px, 4vw, 56px) clamp(40px, 5vw, 80px);
 }
 
 .statementText {
@@ -466,7 +468,7 @@
 
 /* ===== About ===== */
 .about {
-  padding: clamp(80px, 10vw, 160px) clamp(20px, 4vw, 56px);
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 4vw, 56px);
 }
 
 .aboutGrid {
@@ -774,7 +776,7 @@
   gap: clamp(16px, 3vw, 48px);
   align-items: center;
   width: 100%;
-  padding: clamp(72px, 7vw, 96px) 0;
+  padding: clamp(64px, 6vw, 80px) 0;
   transition: background 0.4s;
 }
 
@@ -1130,8 +1132,7 @@
 
 /* ===== DJ Services ===== */
 .services {
-  padding: clamp(60px, 8vw, 120px) clamp(20px, 4vw, 56px)
-    clamp(80px, 10vw, 160px);
+  padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 56px) clamp(56px, 6vw, 96px);
   background: #fff;
   color: #000;
 }
@@ -1253,8 +1254,7 @@
 
 /* ===== Booking ===== */
 .booking {
-  padding: clamp(80px, 10vw, 160px) clamp(20px, 4vw, 56px)
-    clamp(60px, 8vw, 120px);
+  padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 56px) clamp(40px, 5vw, 80px);
 }
 
 .bookingInner {
@@ -1391,7 +1391,7 @@
 
 /* ===== Footer ===== */
 .footer {
-  padding: clamp(56px, 7vw, 100px) clamp(20px, 4vw, 56px) 88px;
+  padding: clamp(40px, 5vw, 72px) clamp(20px, 4vw, 56px) 88px;
   overflow: hidden;
   container-type: inline-size;
 }
@@ -1530,6 +1530,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .reveal {
+    transform: none;
     transition: none;
   }
 
