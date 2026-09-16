@@ -12,6 +12,7 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
   return (
     <header
       className={s.header}
+      data-open={open}
       style={{ paddingBlock: scrolled ? "14px" : "26px" }}
     >
       <a
@@ -19,8 +20,8 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
         onClick={onClose}
         className={`${s.mark} ${scrolled ? s.markScrolled : ""}`}
       >
-        {/* White on transparent, so the header's difference blend inverts
-            it over light sections just as it did the text wordmark. */}
+        {/* White on transparent with a dark edge, so it reads over any part
+            of the hero photo; inverted to black over light sections. */}
         <Image
           src="/brand/logo-ss-white.png"
           alt="SEKRATE SAUCE"

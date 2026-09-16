@@ -3,7 +3,12 @@ import { services } from "@/lib/site-data";
 
 export default function Services() {
   return (
-    <section id="services" data-reveal className={`${s.services} ${s.reveal}`}>
+    <section
+      id="services"
+      data-reveal
+      data-tone="light"
+      className={`${s.services} ${s.reveal}`}
+    >
       <div className={s.servicesInner}>
         <div className={s.servicesHead}>
           <h2 data-drift className={`${s.display} ${s.servicesTitle}`}>

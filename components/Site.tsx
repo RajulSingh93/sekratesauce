@@ -110,6 +110,11 @@ export default function Site({ year }: { year: number }) {
     const photos = [
       ...document.querySelectorAll<HTMLElement>("[data-parallax]"),
     ];
+    const header = document.querySelector<HTMLElement>("header");
+    const lightSections = [
+      ...document.querySelectorAll<HTMLElement>('[data-tone="light"]'),
+    ];
+    let overLight: boolean | null = null;
 
     // Only touch the DOM when a value changes, so still elements cost nothing.
     const written = new WeakMap<HTMLElement, Map<string, string>>();
@@ -158,6 +163,21 @@ export default function Site({ year }: { year: number }) {
       const scrollY = window.scrollY;
       const vh = window.innerHeight;
       setScrolled(scrollY > 40);
+
+      // The header is white, so it turns black while its middle sits over a
+      // light section (see the header rules in site.module.css).
+      if (header) {
+        const mid = header.offsetHeight / 2;
+        const next = lightSections.some((el) => {
+          const top = pageTop(el) - scrollY;
+          return top <= mid && top + el.offsetHeight >= mid;
+        });
+        if (next !== overLight) {
+          overLight = next;
+          header.toggleAttribute("data-over-light", next);
+        }
+      }
+
       if (reducedMotion) return;
 
       const y = Math.min(scrollY, SCROLL_CAP);
