@@ -22,10 +22,10 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
         {/* White on transparent, so the header's difference blend inverts
             it over light sections just as it did the text wordmark. */}
         <Image
-          src="/brand/logo-white.png"
+          src="/brand/logo-ss-white.png"
           alt="SEKRATE SAUCE"
           width={96}
-          height={94}
+          height={80}
           loading="eager"
           className={s.logo}
         />
