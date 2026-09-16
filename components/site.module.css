@@ -151,13 +151,19 @@
 }
 
 .mark {
-  font-weight: 900;
-  font-variation-settings: "wdth" 118;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  white-space: nowrap;
-  transition: font-size 0.4s ease;
-  padding-block: 11px;
+  display: block;
+  line-height: 0;
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: 56px;
+  transition: height 0.4s ease;
+}
+
+.markScrolled .logo {
+  height: 44px;
 }
 
 .menuBtn {
@@ -202,7 +208,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: clamp(96px, 12vh, 140px) clamp(20px, 4vw, 56px) clamp(32px, 6vh, 64px);
+  /* The top floor clears the header and its logo on short screens. */
+  padding: clamp(116px, 12vh, 140px) clamp(20px, 4vw, 56px) clamp(32px, 6vh, 64px);
   transition: clip-path 0.7s cubic-bezier(0.77, 0, 0.18, 1);
   overscroll-behavior: contain;
 }
@@ -1453,16 +1460,8 @@
 
 /* ===== Responsive ===== */
 
-/* Narrow phones: tighten the header button and the energy meter so both fit. */
+/* Narrow phones: tighten the energy meter so it fits. */
 @media (max-width: 400px) {
-  .menuBtn {
-    gap: 10px;
-  }
-
-  .menuBtnLabel {
-    font-size: 13px;
-  }
-
   .meterLabel {
     letter-spacing: 0.14em;
   }
@@ -1484,8 +1483,17 @@
   }
 }
 
-/* Phones: drop the menu descriptors, which would squeeze the link labels. */
+/* Phones: a slightly smaller logo, and no menu descriptors, which would
+   squeeze the link labels. */
 @media (max-width: 480px) {
+  .logo {
+    height: 48px;
+  }
+
+  .markScrolled .logo {
+    height: 44px;
+  }
+
   .menuLink {
     grid-template-columns: 32px minmax(0, 1fr);
   }

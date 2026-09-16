@@ -1,3 +1,4 @@
+import Image from "next/image";
 import s from "./site.module.css";
 
 type Props = {
@@ -16,13 +17,18 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
       <a
         href="#home"
         onClick={onClose}
-        className={s.mark}
-        // Scales down on narrow phones so the wordmark and Menu button fit.
-        style={{
-          fontSize: scrolled ? "clamp(15px, 4.5vw, 18px)" : "clamp(16px, 5.3vw, 22px)",
-        }}
+        className={`${s.mark} ${scrolled ? s.markScrolled : ""}`}
       >
-        SEKRATE SAUCE
+        {/* White on transparent, so the header's difference blend inverts
+            it over light sections just as it did the text wordmark. */}
+        <Image
+          src="/brand/logo-white.png"
+          alt="SEKRATE SAUCE"
+          width={96}
+          height={94}
+          loading="eager"
+          className={s.logo}
+        />
       </a>
       <button onClick={onToggle} aria-label="Menu" className={s.menuBtn}>
         <span className={s.bars}>
