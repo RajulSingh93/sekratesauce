@@ -450,6 +450,17 @@
   animation: scrollHint 1.8s ease-in-out infinite;
 }
 
+/* Keyframes live in this module: CSS Modules renames animation names, so a
+   reference here would not match keyframes defined globally. */
+@keyframes scrollHint {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
 /* ===== Statement ===== */
 .statement {
   padding: clamp(56px, 7vw, 112px) clamp(20px, 4vw, 56px) clamp(40px, 5vw, 80px);
@@ -1060,6 +1071,16 @@
   border-radius: 50%;
   background: #000;
   animation: blinkDot 1.4s ease-in-out infinite;
+}
+
+@keyframes blinkDot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
 }
 
 .radioWave {
