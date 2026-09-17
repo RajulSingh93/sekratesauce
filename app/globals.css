@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+/* Registered so the intro's zoom interpolates instead of jumping. */
+@property --intro-zoom {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
 html {
   scroll-behavior: smooth;
   background: #000;

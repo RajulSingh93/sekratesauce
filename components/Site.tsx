@@ -26,6 +26,7 @@ import Footer from "./Footer";
 import GenreRibbon from "./GenreRibbon";
 import Header from "./Header";
 import Hero from "./Hero";
+import Intro from "./Intro";
 import MenuOverlay from "./MenuOverlay";
 import Mixtapes from "./Mixtapes";
 import Music from "./Music";
@@ -585,6 +586,8 @@ export default function Site({ year }: { year: number }) {
 
   return (
     <div className={s.root}>
+      <Intro />
+
       <EnergyMeter cellRefs={cellRefs} pctRef={pctRef} />
 
       <Header

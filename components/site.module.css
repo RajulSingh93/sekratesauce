@@ -138,6 +138,218 @@
   min-width: 3ch;
 }
 
+/* ===== Intro ===== */
+/* Covers the page while it loads. The chevrons light up one by one; then a
+   hole the shape of the logo opens in the black and zooms past the viewer,
+   revealing the page through it. Intro.tsx sets data-phase and shares the
+   timings below. */
+.intro {
+  --logo-w: clamp(96px, 11vw, 150px);
+  --logo-h: calc(var(--logo-w) * 0.9563);
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  /* Stop covering the page if the script never runs. */
+  animation: introFailsafe 0.4s ease 9s forwards;
+}
+
+.introBg,
+.introMask {
+  position: absolute;
+  inset: 0;
+  background: #000;
+}
+
+/* Black except for a logo-shaped hole over the lit chevrons. The zoom grows
+   the hole around a point inside the middle chevron (60.12% across, 48.4%
+   down), holding that point still. */
+.introMask {
+  mask-image: url("/brand/logo-fwrd-mask.png"), linear-gradient(#000, #000);
+  mask-repeat: no-repeat;
+  mask-size:
+    calc(var(--logo-w) * var(--intro-zoom, 1))
+      calc(var(--logo-h) * var(--intro-zoom, 1)),
+    100% 100%;
+  mask-position:
+    calc(50% + var(--logo-w) * 0.1012 * (1 - var(--intro-zoom, 1)))
+      calc(50% - var(--logo-h) * 0.016 * (1 - var(--intro-zoom, 1))),
+    0 0;
+  mask-composite: exclude;
+}
+
+.introLogo {
+  position: absolute;
+  inset: 0;
+  width: var(--logo-w);
+  height: var(--logo-h);
+  margin: auto;
+  animation: introIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  transition: opacity 0.2s ease;
+}
+
+.introChevron {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.16;
+  animation: 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* Each copy of the logo is clipped to one chevron, along the gaps. */
+.introChevron1 {
+  clip-path: polygon(0% 0%, 10.51% 0%, 46.47% 49.16%, 10.21% 100%, 0% 100%);
+  animation-name: introStep1;
+}
+
+.introChevron2 {
+  clip-path: polygon(
+    10.51% 0%,
+    46.47% 49.16%,
+    10.21% 100%,
+    40.97% 100%,
+    76.71% 48.55%,
+    40.62% 0%
+  );
+  animation-name: introStep2;
+}
+
+.introChevron3 {
+  clip-path: polygon(40.62% 0%, 76.71% 48.55%, 40.97% 100%, 100% 100%, 100% 0%);
+  animation-name: introStep3;
+}
+
+.intro[data-phase="reveal"] .introLogo {
+  opacity: 0;
+}
+
+.intro[data-phase="reveal"] .introBg {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.1s;
+}
+
+.intro[data-phase="reveal"] .introMask {
+  opacity: 0;
+  animation: introZoom 1.6s linear forwards;
+  transition: opacity 0.3s ease 1.3s;
+}
+
+@keyframes introIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+/* One pass: each chevron steps forward and holds, then all three dim. */
+@keyframes introStep1 {
+  0% {
+    opacity: 0.16;
+    transform: translateX(-6%);
+  }
+  12.5%,
+  75% {
+    opacity: 1;
+    transform: none;
+  }
+  87.5% {
+    opacity: 0.16;
+    transform: none;
+  }
+  100% {
+    opacity: 0.16;
+    transform: translateX(-6%);
+  }
+}
+
+@keyframes introStep2 {
+  0%,
+  25% {
+    opacity: 0.16;
+    transform: translateX(-6%);
+  }
+  37.5%,
+  75% {
+    opacity: 1;
+    transform: none;
+  }
+  87.5% {
+    opacity: 0.16;
+    transform: none;
+  }
+  100% {
+    opacity: 0.16;
+    transform: translateX(-6%);
+  }
+}
+
+@keyframes introStep3 {
+  0%,
+  50% {
+    opacity: 0.16;
+    transform: translateX(-6%);
+  }
+  62.5%,
+  75% {
+    opacity: 1;
+    transform: none;
+  }
+  87.5% {
+    opacity: 0.16;
+    transform: none;
+  }
+  100% {
+    opacity: 0.16;
+    transform: translateX(-6%);
+  }
+}
+
+/* Zoom factor 140^(t^1.5): slow while the page appears inside the logo,
+   then rushing past. */
+@keyframes introZoom {
+  0% {
+    --intro-zoom: 1;
+  }
+  10% {
+    --intro-zoom: 1.17;
+  }
+  20% {
+    --intro-zoom: 1.56;
+  }
+  30% {
+    --intro-zoom: 2.25;
+  }
+  40% {
+    --intro-zoom: 3.49;
+  }
+  50% {
+    --intro-zoom: 5.74;
+  }
+  60% {
+    --intro-zoom: 9.94;
+  }
+  70% {
+    --intro-zoom: 18.07;
+  }
+  80% {
+    --intro-zoom: 34.33;
+  }
+  90% {
+    --intro-zoom: 67.97;
+  }
+  100% {
+    --intro-zoom: 140;
+  }
+}
+
+@keyframes introFailsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
 /* ===== Header ===== */
 .header {
   position: fixed;
@@ -1581,6 +1793,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+
   .reveal {
     opacity: 1;
     transform: none;
