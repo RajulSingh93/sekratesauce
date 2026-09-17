@@ -20,13 +20,13 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
         onClick={onClose}
         className={`${s.mark} ${scrolled ? s.markScrolled : ""}`}
       >
-        {/* White on transparent with a dark edge, so it reads over any part
-            of the hero photo; inverted to black over light sections. */}
+        {/* The black-outlined artwork with its tones swapped, so all of each
+            arrow shows on the dark photo; inverted back over light sections. */}
         <Image
-          src="/brand/logo-ss-white.png"
+          src="/brand/logo-arrows-white.png"
           alt="SEKRATE SAUCE"
-          width={96}
-          height={80}
+          width={88}
+          height={84}
           loading="eager"
           className={s.logo}
         />
