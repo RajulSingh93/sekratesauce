@@ -62,7 +62,7 @@ export default function Footer({ year }: { year: number }) {
             <a href="#" style={{ color: "inherit" }}>
               Privacy
             </a>
-            <a href="#home" style={{ color: "inherit" }}>
+            <a href="#home" className={s.backToTop}>
               Back to top ↑
             </a>
           </div>
