@@ -69,11 +69,8 @@ export default function Music({
                 <button
                   onClick={() => onToggle(i)}
                   aria-label={`Play or pause ${t.title}`}
+                  data-on={on}
                   className={s.playBtn}
-                  style={{
-                    background: on ? "#fff" : "transparent",
-                    color: on ? "#000" : "#fff",
-                  }}
                 >
                   {on ? "❚❚" : "▶"}
                 </button>
