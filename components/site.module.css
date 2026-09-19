@@ -3,54 +3,6 @@
   position: relative;
   background: #000;
   color: #fff;
-
-  /* Frosted glass for the buttons: a translucent pane over a blur of
-     whatever sits behind it, a lit edge and a soft shadow. The ink set is
-     the same idea on the light sections, where the text stays black. */
-  --glass: rgba(255, 255, 255, 0.1);
-  --glass-hover: rgba(255, 255, 255, 0.2);
-  --glass-on: rgba(255, 255, 255, 0.32);
-  --glass-on-hover: rgba(255, 255, 255, 0.42);
-  --glass-edge: rgba(255, 255, 255, 0.4);
-  --glass-edge-lit: rgba(255, 255, 255, 0.75);
-  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  --glass-ink: rgba(0, 0, 0, 0.1);
-  --glass-ink-hover: rgba(0, 0, 0, 0.2);
-  --glass-ink-edge: rgba(0, 0, 0, 0.3);
-  --glass-ink-edge-lit: rgba(0, 0, 0, 0.55);
-  --glass-ink-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  --glass-blur: blur(16px) saturate(150%);
-  --glass-radius: 6px;
-}
-
-/* Without backdrop blur there is nothing to see through, so the panes carry
-   themselves on fill alone. */
-@supports not (
-  (backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))
-) {
-  .root {
-    --glass: rgba(255, 255, 255, 0.2);
-    --glass-hover: rgba(255, 255, 255, 0.3);
-    --glass-ink: rgba(0, 0, 0, 0.16);
-    --glass-ink-hover: rgba(0, 0, 0, 0.26);
-  }
-}
-
-/* Solid buttons for anyone who has asked their system to cut transparency. */
-@media (prefers-reduced-transparency: reduce) {
-  .root {
-    --glass: #1b1b1b;
-    --glass-hover: #2b2b2b;
-    --glass-on: #3d3d3d;
-    --glass-on-hover: #4a4a4a;
-    --glass-ink: #ededed;
-    --glass-ink-hover: #dcdcdc;
-    --glass-shadow: none;
-    --glass-ink-shadow: none;
-    --glass-blur: none;
-  }
 }
 
 .chip {
@@ -420,9 +372,6 @@
 }
 
 .header[data-over-light]:not([data-open="true"]) .menuBtn {
-  background: var(--glass-ink);
-  border-color: var(--glass-ink-edge);
-  box-shadow: var(--glass-ink-shadow);
   color: #000;
 }
 
@@ -458,23 +407,13 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  background: var(--glass);
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--glass-radius);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
-  padding: 8px 16px;
+  background: none;
+  border: 0;
+  padding: 8px 0;
   min-height: 44px;
   color: #fff;
   cursor: pointer;
-  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
-}
-
-@media (hover: hover) {
-  .menuBtn:hover {
-    background: var(--glass-hover);
-    border-color: var(--glass-edge-lit);
-  }
+  transition: color 0.3s ease;
 }
 
 .bars {
@@ -598,12 +537,8 @@
   display: inline-flex;
   align-self: flex-start;
   align-items: center;
-  background: var(--glass-on);
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--glass-radius);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
-  color: #fff;
+  background: #fff;
+  color: #000;
   padding: 18px 28px;
   min-height: 52px;
   font-size: 12px;
@@ -611,14 +546,11 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
-  transition: background 0.3s, border-color 0.3s;
 }
 
 @media (hover: hover) {
   .solidBtn:hover {
-    background: var(--glass-on-hover);
-    border-color: var(--glass-edge-lit);
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 
@@ -1001,29 +933,19 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  border: 1px solid var(--glass-edge);
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
-  color: #fff;
+  border: 1px solid #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
   font-size: 15px;
-  transition: background 0.25s, border-color 0.25s;
+  transition: background 0.25s, color 0.25s;
 }
 
 @media (hover: hover) {
   .playBtn:hover {
-    background: var(--glass-hover);
-    border-color: var(--glass-edge-lit);
+    background: #fff;
+    color: #000;
   }
-}
-
-/* Playing: a brighter pane in place of the old solid fill. */
-.playBtn[data-on="true"] {
-  background: var(--glass-on);
-  border-color: var(--glass-edge-lit);
 }
 
 .seekWrap {
@@ -1177,21 +1099,19 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  border: 1px solid var(--glass-edge);
-  /* Darker than the rest: this one sits on a bright thumbnail. */
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
   display: grid;
   place-items: center;
   font-size: 20px;
-  transition: background 0.25s, border-color 0.25s;
+  transition: background 0.25s, color 0.25s;
 }
 
 @media (hover: hover) {
   .mixThumbBtn:hover .mixPlay {
-    background: var(--glass-hover);
-    border-color: var(--glass-edge-lit);
+    background: #fff;
+    color: #000;
   }
 }
 
@@ -1253,31 +1173,20 @@
   gap: 12px;
   padding: 14px 22px;
   min-height: 48px;
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--glass-radius);
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
-  color: #fff;
+  border: 1px solid #fff;
   cursor: pointer;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  transition: background 0.25s, border-color 0.25s;
+  transition: background 0.25s, color 0.25s;
 }
 
 @media (hover: hover) {
   .outlineBtn:hover {
-    background: var(--glass-hover);
-    border-color: var(--glass-edge-lit);
+    background: #fff;
+    color: #000;
   }
-}
-
-/* Playing: a brighter pane in place of the old solid fill. */
-.outlineBtn[data-on="true"] {
-  background: var(--glass-on);
-  border-color: var(--glass-edge-lit);
 }
 
 .mixLink {
@@ -1466,11 +1375,7 @@
   justify-self: start;
   align-items: center;
   gap: 12px;
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--glass-radius);
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  border: 1px solid #fff;
   padding: 16px 24px;
   min-height: 52px;
   font-size: 12px;
@@ -1478,13 +1383,13 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
-  transition: background 0.3s, border-color 0.3s;
+  transition: background 0.3s, color 0.3s;
 }
 
 @media (hover: hover) {
   .ghostBtn:hover {
-    background: var(--glass-hover);
-    border-color: var(--glass-edge-lit);
+    background: #fff;
+    color: #000;
     opacity: 1;
   }
 }
@@ -1515,16 +1420,11 @@
   font-size: clamp(3rem, 10vw, 13rem);
 }
 
-/* On the white section, so the pane is tinted with ink rather than light. */
 .darkBtn {
   display: inline-flex;
   align-items: center;
-  background: var(--glass-ink);
-  border: 1px solid var(--glass-ink-edge);
-  border-radius: var(--glass-radius);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-ink-shadow);
-  color: #000;
+  background: #000;
+  color: #fff;
   padding: 18px 28px;
   min-height: 52px;
   font-size: 12px;
@@ -1532,14 +1432,11 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
-  transition: background 0.3s, border-color 0.3s;
 }
 
 @media (hover: hover) {
   .darkBtn:hover {
-    background: var(--glass-ink-hover);
-    border-color: var(--glass-ink-edge-lit);
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 
@@ -1716,12 +1613,9 @@
 .submit {
   display: inline-flex;
   align-items: center;
-  background: var(--glass-on);
-  color: #fff;
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--glass-radius);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  background: #fff;
+  color: #000;
+  border: 0;
   padding: 20px 36px;
   min-height: 56px;
   font-size: 12px;
@@ -1730,14 +1624,12 @@
   text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.3s, border-color 0.3s, opacity 0.3s;
+  transition: opacity 0.3s;
 }
 
 @media (hover: hover) {
   .submit:hover {
-    background: var(--glass-on-hover);
-    border-color: var(--glass-edge-lit);
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 

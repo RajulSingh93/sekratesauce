@@ -91,8 +91,11 @@ export default function Mixtapes({ active, onPlay, onToggle }: Props) {
                 <div className={s.mixActions}>
                   <button
                     onClick={() => onToggle(i)}
-                    data-on={on}
                     className={s.outlineBtn}
+                    style={{
+                      background: on ? "#fff" : "transparent",
+                      color: on ? "#000" : "#fff",
+                    }}
                   >
                     {on ? "Stop" : "Play mix"}
                   </button>
