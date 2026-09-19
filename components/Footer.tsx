@@ -1,3 +1,4 @@
+import Image from "next/image";
 import s from "./site.module.css";
 import { email, social } from "@/lib/site-data";
 
@@ -44,7 +45,16 @@ export default function Footer({ year }: { year: number }) {
         <p className={`${s.display} ${s.footerMark}`}>Sekrate Sauce</p>
 
         <div className={s.footerBottom}>
-          <span>© SEKRATE SAUCE {year}. All rights reserved.</span>
+          <span className={s.footerCopy}>
+            <Image
+              src="/brand/logo-chev-white.png"
+              alt=""
+              width={44}
+              height={28}
+              className={s.footerLogo}
+            />
+            © SEKRATE SAUCE {year}. All rights reserved.
+          </span>
           <div className={s.footerLinks}>
             <a href="#" style={{ color: "inherit" }}>
               Terms

@@ -145,7 +145,7 @@
    timings below. */
 .intro {
   --logo-w: clamp(96px, 11vw, 150px);
-  --logo-h: calc(var(--logo-w) * 0.9563);
+  --logo-h: calc(var(--logo-w) * 0.6369);
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -162,18 +162,18 @@
 }
 
 /* Black except for a logo-shaped hole over the lit chevrons. The zoom grows
-   the hole around a point inside the middle chevron (60.12% across, 48.4%
+   the hole around a point inside the middle chevron (56.91% across, 50.43%
    down), holding that point still. */
 .introMask {
-  mask-image: url("/brand/logo-fwrd-mask.png"), linear-gradient(#000, #000);
+  mask-image: url("/brand/logo-chev-white.png"), linear-gradient(#000, #000);
   mask-repeat: no-repeat;
   mask-size:
     calc(var(--logo-w) * var(--intro-zoom, 1))
       calc(var(--logo-h) * var(--intro-zoom, 1)),
     100% 100%;
   mask-position:
-    calc(50% + var(--logo-w) * 0.1012 * (1 - var(--intro-zoom, 1)))
-      calc(50% - var(--logo-h) * 0.016 * (1 - var(--intro-zoom, 1))),
+    calc(50% + var(--logo-w) * 0.0691 * (1 - var(--intro-zoom, 1)))
+      calc(50% + var(--logo-h) * 0.0043 * (1 - var(--intro-zoom, 1))),
     0 0;
   mask-composite: exclude;
 }
@@ -199,24 +199,24 @@
 
 /* Each copy of the logo is clipped to one chevron, along the gaps. */
 .introChevron1 {
-  clip-path: polygon(0% 0%, 10.51% 0%, 46.47% 49.16%, 10.21% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 15.69% 0%, 41.39% 50.43%, 14.63% 100%, 0% 100%);
   animation-name: introStep1;
 }
 
 .introChevron2 {
   clip-path: polygon(
-    10.51% 0%,
-    46.47% 49.16%,
-    10.21% 100%,
-    40.97% 100%,
-    76.71% 48.55%,
-    40.62% 0%
+    15.69% 0%,
+    41.39% 50.43%,
+    14.63% 100%,
+    46.5% 100%,
+    73.72% 50%,
+    46.76% 0%
   );
   animation-name: introStep2;
 }
 
 .introChevron3 {
-  clip-path: polygon(40.62% 0%, 76.71% 48.55%, 40.97% 100%, 100% 100%, 100% 0%);
+  clip-path: polygon(46.76% 0%, 73.72% 50%, 46.5% 100%, 100% 100%, 100% 0%);
   animation-name: introStep3;
 }
 
@@ -392,7 +392,9 @@
 .logo {
   display: block;
   width: auto;
-  height: 72px;
+  /* The chevrons are wider than they are tall, so this height carries about
+     the same width as the marks that came before. */
+  height: 54px;
   /* A tight dark edge plus a soft glow keep the white strokes readable over
      bright photos such as the hero. */
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7)) drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55));
@@ -400,7 +402,7 @@
 }
 
 .markScrolled .logo {
-  height: 56px;
+  height: 44px;
 }
 
 .menuBtn {
@@ -1717,6 +1719,21 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* The mark sits on the copyright line, so they wrap together. */
+.footerCopy {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footerLogo {
+  display: block;
+  width: auto;
+  height: 18px;
+  /* Pitched to the dimmed text it sits beside. */
+  opacity: 0.6;
+}
+
 .footerLinks {
   display: flex;
   gap: 24px;
@@ -1751,11 +1768,11 @@
    squeeze the link labels. */
 @media (max-width: 480px) {
   .logo {
-    height: 60px;
+    height: 44px;
   }
 
   .markScrolled .logo {
-    height: 48px;
+    height: 36px;
   }
 
   .menuLink {

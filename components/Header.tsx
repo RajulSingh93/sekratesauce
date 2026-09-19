@@ -22,10 +22,10 @@ export default function Header({ scrolled, open, onToggle, onClose }: Props) {
       >
         {/* White on transparent; inverted to black over light sections. */}
         <Image
-          src="/brand/logo-fwrd-white.png"
+          src="/brand/logo-chev-white.png"
           alt="SEKRATE SAUCE"
-          width={88}
-          height={84}
+          width={96}
+          height={61}
           loading="eager"
           className={s.logo}
         />

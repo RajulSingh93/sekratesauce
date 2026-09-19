@@ -9,7 +9,7 @@ const jsonLd = {
   "@type": "MusicGroup",
   name: "SEKRATE SAUCE",
   url: siteUrl.href,
-  logo: new URL("/brand/logo-ss-square.png", siteUrl).href,
+  logo: new URL("/brand/logo-chev-square.png", siteUrl).href,
   email,
   genre: ["Tech House", "Dubstep", "Trap House", "Amapiano", "Jersey House", "UK Garage"],
   sameAs: Object.values(social),

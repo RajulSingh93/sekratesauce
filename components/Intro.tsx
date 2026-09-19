@@ -35,7 +35,7 @@ export default function Intro() {
     const run = async () => {
       // The reveal shows the page through the mask image, so wait for both.
       const mask = new window.Image();
-      mask.src = "/brand/logo-fwrd-mask.png";
+      mask.src = "/brand/logo-chev-white.png";
       const loaded =
         document.readyState === "complete"
           ? null
@@ -92,10 +92,10 @@ export default function Intro() {
           <Image
             key={cls}
             ref={i === chevrons.length - 1 ? lastChevron : undefined}
-            src="/brand/logo-fwrd-white.png"
+            src="/brand/logo-chev-white.png"
             alt=""
             width={150}
-            height={143}
+            height={96}
             loading="eager"
             className={`${s.introChevron} ${cls}`}
           />
