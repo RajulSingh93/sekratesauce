@@ -601,9 +601,10 @@
 
 .heroBg {
   position: absolute;
-  /* The slack for the parallax sits below, so the top of the frame stays
-     level with the top of the hero and the subject keeps their head. */
-  inset: 0 0 -12% 0;
+  /* Exactly the hero: the parallax only ever slides this down, and the 4%
+     overscale covers the edge, so extra slack would just push the foot of
+     the frame out of sight. */
+  inset: 0;
   z-index: 0;
   will-change: transform;
   transform: scale(1.04);
@@ -614,20 +615,25 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Cropping happens at the foot of the frame, never over the subject. */
-  object-position: 50% 0;
+  /* Held near the top of the frame: enough headroom for the subject at the
+     highest point of the loop, while the field still reaches the hero's
+     foot. */
+  object-position: 50% 15%;
   /* Until the loop has buffered, the poster frame fills the same box. */
   background: #000;
 }
 
+/* Dark enough for the type to hold, but the foot only deepens over the last
+   sliver, so the field stays visible instead of washing out to black. */
 .heroScrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: linear-gradient(
     to top,
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 35%,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.6) 9%,
+    rgba(0, 0, 0, 0.55) 30%,
     rgba(0, 0, 0, 0.45) 65%,
     rgba(0, 0, 0, 0.35) 100%
   );
