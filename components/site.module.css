@@ -607,6 +607,15 @@
   transform: scale(1.04);
 }
 
+.heroVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Until the loop has buffered, the poster frame fills the same box. */
+  background: #000;
+}
+
 .heroScrim {
   position: absolute;
   inset: 0;

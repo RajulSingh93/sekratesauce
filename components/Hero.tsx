@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 import s from "./site.module.css";
 
@@ -9,16 +9,40 @@ type Props = {
 };
 
 export default function Hero({ bgRef, fgRef }: Props) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    // The loop is silent, and stays that way: React does not always render
+    // the muted attribute on the server, and autoplay is only allowed while
+    // a video is muted.
+    video.muted = true;
+    video.volume = 0;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      video.pause();
+      return;
+    }
+    void video.play().catch(() => {
+      // Autoplay can still be refused; the poster frame stands in.
+    });
+  }, []);
+
   return (
     <section id="home" className={s.hero}>
       <div ref={bgRef} className={s.heroBg}>
-        <Image
-          src="/assets/hero-musica.jpg"
-          alt=""
-          fill
-          preload
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
+        <video
+          ref={videoRef}
+          src="/assets/hero-loop.mp4"
+          poster="/assets/hero-loop-poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          tabIndex={-1}
+          className={s.heroVideo}
         />
       </div>
       <div aria-hidden="true" className={s.heroScrim} />
