@@ -3,6 +3,8 @@
   position: relative;
   background: #000;
   color: #fff;
+  /* Softened corners, shared by every framed image. */
+  --img-radius: clamp(10px, 1.1vw, 18px);
 }
 
 .chip {
@@ -822,6 +824,7 @@
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
+  border-radius: var(--img-radius);
   background: #0a0a0a;
 }
 
@@ -876,6 +879,7 @@
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
+  border-radius: var(--img-radius);
   background: #0a0a0a;
 }
 
@@ -1054,6 +1058,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  border-radius: var(--img-radius);
   background: #0a0a0a;
   outline-offset: 6px;
   transition: outline-color 0.3s;
@@ -1223,6 +1228,7 @@
   margin: 0;
   position: relative;
   overflow: hidden;
+  border-radius: var(--img-radius);
   background: #0a0a0a;
 }
 
